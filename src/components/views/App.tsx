@@ -3,27 +3,28 @@ import { Provider, useSelector } from 'react-redux';
 import { ThemeProvider, makeStyles, createMuiTheme } from '@material-ui/core';
 
 import SpotifyPlayer from '../SpotifyPlayer';
-
 import Router from '../../router';
+
 import configureStore from '../../store/configureStore';
 import { getSetting } from '../../reducers';
 import { /* darkTheme, */ lightTheme } from '../../utils/themes';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     flex: 1,
-    padding: 0,
-    margin: 0,
+    width: (props: any) => props.width,
+    height: '100vh',
+    background: theme.palette.secondary.main,
   },
   content: {
     height: '100vh',
-    padding: 0,
-    margin: 0,
   },
-});
+}));
 
 const Themed = () => {
-  const classes = useStyles();
+  const classes = useStyles({
+    width: '18px'
+  });
   const isDark = useSelector(getSetting('isDark'));
   const theme = useMemo(
     () =>
@@ -56,5 +57,7 @@ const App = () => {
     </Provider>
   );
 };
+
+const changeName = (name: string) => name;
 
 export default App;
