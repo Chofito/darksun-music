@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useMemo } from 'react';
+import { Provider, useSelector } from 'react-redux';
+import { ThemeProvider, makeStyles, createMuiTheme } from '@material-ui/core';
 
-function App() {
+import SpotifyPlayer from '../SpotifyPlayer';
+
+import Router from '../../router';
+import configureStore from '../../store/configureStore';
+import { getSetting } from '../../reducers';
+import { /* darkTheme, */ lightTheme } from '../../utils/themes';
+
+const useStyles = makeStyles({
+  root: {
+    flex: 1,
+    padding: 0,
+    margin: 0,
+  },
+  content: {
+    height: '100vh',
+    padding: 0,
+    margin: 0,
+  },
+});
+
+const Themed = () => {
+  const classes = useStyles();
+  const isDark = useSelector(getSetting('isDark'));
+  const theme = useMemo(
+    () =>
+      createMuiTheme(
+        isDark
+          ? lightTheme
+          : lightTheme
+      ),
+    [isDark],
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <div className={classes.content}>
+          <Router />
+          <SpotifyPlayer />
+        </div>
+      </div>
+    </ThemeProvider>
   );
 }
+
+const App = () => {
+  const { store } = configureStore();
+
+  return (
+    <Provider store={store}>
+      <Themed />
+    </Provider>
+  );
+};
 
 export default App;

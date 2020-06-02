@@ -8,6 +8,7 @@ export type SettingsState = {
 const defaultSettings: any = {
   isDark: true,
   userLang: null,
+  firstTime: true,
 };
 
 const settings = (state = defaultSettings, action: GenericActionType): any => {
